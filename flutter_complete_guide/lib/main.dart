@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
-import './answer.dart';
-import './question.dart';
+// import './answer.dart';
+// import './question.dart';
+import "./quiz.dart";
+import "./result.dart";
+
 void main(List<String> args) {
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
 
+ 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  var questionIndex=0;
-
-  void  answerQuestion(){
-    questionIndex=questionIndex+1;
-    
-  }
-
- Widget build(BuildContext context){
-   const questions=[
+   final questions=const[
      {'questionText':'What\'s your favroite color',
-      'answers':['Black','white', 'green', 'Red']
+      'answers':[
+        {'text':'Black', 'score':10},
+        {'text':'white', 'score':6}, 
+        {'text':'green', 'score':9},
+        {'text':'Red', 'score':5}
+       ]
      },
      {'questionText':'Whats your favrite animal',
       'answers':['cow', 'dog', 'cat', 'fish']
@@ -31,25 +32,41 @@ class _MyAppState extends State<MyApp> {
     //  'what is your favroite color',
     //  'your favroite animals',
    ];
+  var questionIndex=0;
+  var _totalScore=0;
+
+  void _resetQuize(){
+    setState((){
+      questionIndex=0;
+      _totalScore=0;
+
+    });
+
+    
+  }
+  void  answerQuestion(int score){
+
+    _totalScore = _totalScore + score;
+      questionIndex=questionIndex+1;
+
+    if(questionIndex<questions.length){
+      print("we have more questions");
+    }
+    
+  }
+
+ Widget build(BuildContext context){
+  
     return MaterialApp(home: Scaffold(
+      
       appBar: AppBar(title: Text("My First App")),//app bar
-      body: Column(
-        children:<Widget>[
-          // Text(questions[questionIndex]['questionText']),
-          Question(questions[questionIndex]['questionText'], questionText: '',),
-          ...(questions[questionIndex]['answers'] as List<String>).map((answer){
-            return Answer(answerQuestion, answer);
-          }).toList()
-          // Answer(answerQuestion),
-          // Answer(answerQuestion),
-          // Answer(answerQuestion),
-
-          // ElevatedButton(onPressed: answerQuestion, child: Text("Answer1")),
-          // ElevatedButton(onPressed: answerQuestion, child: Text("Answer2")),
-          // ElevatedButton(onPressed: answerQuestion, child: Text("Answer2")),
-
-        ],
-      )//body
+      body: questionIndex < questions.length ? 
+      Quiz(
+          answerQuestion:answerQuestion, 
+          questions:questions,
+          questionIndex:questionIndex
+      )
+      : Result(_totalScore)//body
     ));
   }
 }

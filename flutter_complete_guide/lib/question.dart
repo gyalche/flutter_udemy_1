@@ -4,8 +4,9 @@
 // import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 class Question extends StatelessWidget {
-  final String questionText;
-   Question(Object? question, {Key? key, required this.questionText}) : super(key: key);
+   final String questionText;
+  //  Question(Object? question, {Key? key, this.questionText}) : super(key: key);
+  Question(this.questionText);
  
 
  
